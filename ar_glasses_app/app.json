@@ -1,0 +1,42 @@
+{
+  "expo": {
+    "name": "BackupBrain",
+    "slug": "ar_glasses_app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSLocalNetworkUsageDescription": "BackupBrain talks to the vision worker running on your laptop over the local network."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "BackupBrain uses the camera to recognize familiar faces and show memory prompts."
+        }
+      ],
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "BackupBrain listens to conversations to transcribe them into memory notes."
+        }
+      ]
+    ]
+  }
+}

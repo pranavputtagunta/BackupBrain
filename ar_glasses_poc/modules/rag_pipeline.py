@@ -118,9 +118,9 @@ def _generate_fallback(memories: Dict[str, Any]) -> str:
     return prompt
 
 
-def generate_memory_prompt(name: str) -> str:
+def generate_memory_prompt(name: str, memories_dir: str = config.MEMORIES_DIR) -> str:
     """Full RAG flow for one person: load -> retrieve -> generate."""
-    memories = load_memories(name)
+    memories = load_memories(name, memories_dir)
     if memories is None:
         return f"This is {name}."
     context = build_context(memories)
