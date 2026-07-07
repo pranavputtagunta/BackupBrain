@@ -1,0 +1,7 @@
+{
+  "name": "John",
+  "relationship": "son",
+  "last_interaction": "Tuesday phone call",
+  "facts": ["Lives in Austin", "Has two kids", "Works in tech"],
+  "recent_conversations": ["Talked about Thanksgiving plans"]
+}
