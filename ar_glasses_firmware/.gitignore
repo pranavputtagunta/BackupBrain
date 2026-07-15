@@ -1,0 +1,5 @@
+# PlatformIO build artifacts
+.pio/
+
+# Emulator output frame
+latest.png

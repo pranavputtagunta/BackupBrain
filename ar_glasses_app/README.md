@@ -64,9 +64,12 @@ npx expo start
 - `useRecognition` implements the same cooldown-gated `new_detection` rule as
   the Phase 1 recognition thread; `useTranscription` mirrors the voice
   thread's chunked capture (VAD runs server-side).
-- Phase 3 adds a WebSocket bridge from this app to the ESP32 over USB-C; the
-  `ARDisplay` component's props (`prompt`, `name`, `transcript`) are exactly
-  the payload that bridge will stream to the physical display.
+- Phase 3 (implemented): `useDisplayBridge` streams the `ARDisplay` props
+  (`prompt`, `name`, `transcript`) as JSON over WebSocket to the glasses
+  (`ws://192.168.4.1:81`, the ESP32's own access point — see
+  `../ar_glasses_firmware/`). Set `GLASSES_ENABLED`/`GLASSES_WS_URL` in
+  `src/config.ts`; point it at `ar_glasses_firmware/emulator.py` on the
+  laptop to test the bridge without hardware.
 - Recognition is snapshot-based (~1.5s cadence) rather than per-frame — a
   deliberate Phase 2 tradeoff to stay inside Expo Go. A dev build with
   `react-native-vision-camera` frame processors is the upgrade path if

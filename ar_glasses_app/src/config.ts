@@ -26,6 +26,21 @@ export const CONFIG = {
   REQUEST_TIMEOUT_MS: 15000,
 
   /**
+   * Phase 3 glasses bridge. The ESP32 firmware runs an access point
+   * (default SSID "BackupBrain-Glasses") and a WebSocket server at
+   * ws://192.168.4.1:81. Point this at the glasses — or at the Python
+   * emulator (`ar_glasses_firmware/emulator.py`) on your laptop for
+   * hardware-free testing, e.g. "ws://<laptop-ip>:81".
+   */
+  GLASSES_WS_URL: "ws://192.168.4.1:81",
+
+  /** Master switch for the bridge (set false to run app-only Phase 2 mode). */
+  GLASSES_ENABLED: true,
+
+  /** How long to wait before retrying a dropped glasses connection. */
+  GLASSES_RECONNECT_MS: 3000,
+
+  /**
    * Simulated 1.8" SPI display — must stay at the hardware's native
    * resolution (matches AR_DISPLAY_* in ar_glasses_poc/config.py).
    * This component is the ground truth for what Phase 3 streams to the

@@ -25,6 +25,7 @@ import { getHealth } from "./src/api/visionWorker";
 import { ARDisplay } from "./src/components/ARDisplay";
 import { FaceOverlay } from "./src/components/FaceOverlay";
 import { CONFIG } from "./src/config";
+import { useDisplayBridge } from "./src/hooks/useDisplayBridge";
 import { useRecognition } from "./src/hooks/useRecognition";
 import { useTranscription } from "./src/hooks/useTranscription";
 
@@ -38,6 +39,12 @@ export default function App() {
 
   const recognition = useRecognition(cameraRef, cameraReady);
   const transcript = useTranscription(micGranted);
+  // Phase 3: mirror the AR display payload to the physical glasses.
+  const glassesStatus = useDisplayBridge({
+    prompt: recognition.prompt,
+    name: recognition.promptName,
+    transcript,
+  });
 
   useEffect(() => {
     requestRecordingPermissionsAsync().then(({ granted }) => setMicGranted(granted));
@@ -111,6 +118,7 @@ export default function App() {
         />
         <Text style={styles.statusText} numberOfLines={2}>
           {recognition.workerError ?? workerStatus}
+          {glassesStatus === "disabled" ? "" : ` — glasses: ${glassesStatus}`}
         </Text>
       </View>
     </SafeAreaView>
