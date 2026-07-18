@@ -1,0 +1,9 @@
+Maybe have a way to ask the user the first few times if the guess for the person is correct or not
+- Calibrate the model
+- If it is correct, add a snapshot of the face from that moment to faces dir
+
+Memories retrieval: 
+- Currently stores limited information about each person, not full context. 
+- Maybe use vector db to query the database 
+- Only pass context about the people detected maybe instead of everyone
+- For multiple relationships, like "Ted is John's friend" where only Ted is in the image, the llm can requery the vector db for John. 

@@ -29,6 +29,7 @@ STARTER_MEMORY = {
     "last_interaction": "",
     "facts": [],
     "recent_conversations": [],
+    "related_people": [],
 }
 
 

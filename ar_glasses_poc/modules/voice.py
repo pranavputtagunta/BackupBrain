@@ -3,7 +3,9 @@
 Captures audio in fixed-length chunks with `sounddevice`, applies a
 simple RMS-energy VAD gate (Whisper hallucinates text on silence), and
 transcribes voiced chunks with a local Whisper model. Transcripts are
-pushed to `transcript_queue` for the display thread.
+pushed to `transcript_queue` for the display thread, and mirrored into
+an optional `LatestValue` holder so the RAG pipeline can use the live
+conversation as its retrieval query without consuming from the queue.
 
 Phase 2+ will also feed these transcripts back into the per-person
 memory store to improve prompt quality.
@@ -19,6 +21,7 @@ from typing import Any, Optional
 import numpy as np
 
 import config
+from shared_state import LatestValue
 
 logger = logging.getLogger(__name__)
 
@@ -53,10 +56,13 @@ class VoiceThread(threading.Thread):
         self,
         transcript_queue: "queue.Queue[str]",
         shutdown_event: threading.Event,
+        latest_transcript: Optional[LatestValue] = None,
     ) -> None:
         super().__init__(name="VoiceThread", daemon=True)
         self._transcript_queue = transcript_queue
         self._shutdown = shutdown_event
+        # Falls back to a private holder so run() can write unconditionally.
+        self._latest_transcript = latest_transcript if latest_transcript is not None else LatestValue()
 
     def run(self) -> None:
         """Voice loop: record chunk -> VAD gate -> Whisper -> queue."""
@@ -108,6 +114,7 @@ class VoiceThread(threading.Thread):
             if not text:
                 continue
             logger.info("Transcript: %s", text)
+            self._latest_transcript.set(text)
             try:
                 self._transcript_queue.put_nowait(text)
             except queue.Full:

@@ -21,7 +21,7 @@ KNOWN_FACES_DIR = "data/known_faces"
 
 # --- RAG / LLM ---
 MEMORIES_DIR = "data/memories"
-LLM_MODEL = "gpt-4o-mini"         # OpenAI model
+GEMINI_MODEL = "gemini-3.5-flash"  # Google Gemini model
 OLLAMA_MODEL = "llama3.2"         # Fallback local model served by ollama
 OLLAMA_URL = "http://localhost:11434/api/generate"
 LLM_TIMEOUT_SECONDS = 20
@@ -29,6 +29,26 @@ LLM_SYSTEM_PROMPT = (
     "You are a memory assistant for an Alzheimer's patient. Given facts about "
     "the person in front of them, generate a single warm, clear, 1-2 sentence "
     "memory prompt. Use simple language. Start with who the person is."
+)
+
+# --- RAG retrieval / embeddings ---
+EMBEDDING_MODEL = "gemini-embedding-001"
+EMBEDDING_DIMENSIONALITY = 768        # Matryoshka truncation from default 3072;
+                                      # small candidate pools don't need full
+                                      # precision, and it keeps cache files small
+EMBEDDING_TASK_TYPE_DOCUMENT = "RETRIEVAL_DOCUMENT"
+EMBEDDING_TASK_TYPE_QUERY = "RETRIEVAL_QUERY"
+EMBEDDING_TIMEOUT_SECONDS = 20        # mirrors LLM_TIMEOUT_SECONDS
+EMBEDDING_CACHE_SUFFIX = ".embeddings.json"
+RAG_TOP_K = 5                         # max ranked candidates (facts + conversations
+                                      # + related people combined) in the context
+RAG_MIN_SIMILARITY_THRESHOLD = 0.5    # cosine floor; excludes weak matches even
+                                      # when fewer than RAG_TOP_K candidates exist.
+                                      # Starting guess — tune against live queries.
+RAG_OFFLINE_RECENT_CONVERSATIONS = 3  # "recent-N" for the no-API-key fallback
+RAG_COLD_START_QUERY_TEMPLATE = (
+    "General relevant background about {name} to share with "
+    "an Alzheimer's patient right now."
 )
 
 # --- Voice / Whisper ---

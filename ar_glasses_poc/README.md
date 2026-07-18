@@ -40,15 +40,17 @@ pip install -r requirements.txt
 
 ### LLM backend (optional)
 
-Create a `.env` file in `ar_glasses_poc/` with:
+Create a `.env` file in `ar_glasses_poc/` with a
+[Gemini API key](https://aistudio.google.com/apikey):
 
 ```
-OPENAI_API_KEY=sk-...
+GEMINI_API_KEY=...
 ```
 
-If no key is set, the pipeline tries a local [ollama](https://ollama.com)
-server, and finally falls back to an offline template — so the demo always
-runs, just with simpler prompts.
+Prompts are generated with `gemini-3.5-flash` (see `GEMINI_MODEL` in
+`config.py`). If no key is set, the pipeline tries a local
+[ollama](https://ollama.com) server, and finally falls back to an offline
+template — so the demo always runs, just with simpler prompts.
 
 ## Adding a known face
 

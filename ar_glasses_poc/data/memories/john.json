@@ -2,6 +2,17 @@
   "name": "John",
   "relationship": "son",
   "last_interaction": "Tuesday phone call",
-  "facts": ["Lives in Austin", "Has two kids", "Works in tech"],
-  "recent_conversations": ["Talked about Thanksgiving plans"]
+  "facts": [
+    {"text": "Lives in Austin", "important": true},
+    {"text": "Works in tech, just started a new job as a software engineer", "important": false},
+    "Has two kids"
+  ],
+  "recent_conversations": [
+    {"text": "Talked about Thanksgiving plans", "timestamp": "2026-06-20T18:00:00"},
+    {"text": "Mentioned his new job is going well", "timestamp": "2026-07-10T09:30:00"}
+  ],
+  "related_people": [
+    {"name": "sarah", "note": "Sarah is John's sister; they talk every week"},
+    "ted"
+  ]
 }

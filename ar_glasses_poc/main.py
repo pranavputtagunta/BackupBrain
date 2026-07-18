@@ -4,9 +4,13 @@ Wires the four pipeline modules together with queues and threads:
 
     [capture] --frame_queue--> [recognition] --result_queue--> [display]
     [voice]   --transcript_queue-------------------------------^
+    [voice]   --latest_transcript (LatestValue)--> [rag]  (retrieval query)
     [recognition] --rag_queue--> [rag] --prompt_queue--> [display]
 
-Modules never import each other; all wiring happens here.
+Modules never import each other; all wiring happens here. The
+latest_transcript holder exists because transcript_queue is consumed by
+the display thread — the RAG thread reads the same information through
+a non-consuming shared value instead of competing for queue items.
 Run with: python main.py   (press 'q' in a window, or Ctrl+C, to quit)
 """
 
@@ -19,6 +23,7 @@ import threading
 from dotenv import load_dotenv
 
 import config
+from shared_state import LatestValue
 from modules.capture import CaptureThread, WebcamSource
 from modules.display import DisplayThread
 from modules.face_recognition_module import FaceRecognitionThread
@@ -30,7 +35,7 @@ logger = logging.getLogger(__name__)
 
 def main() -> None:
     """Start all pipeline threads and block until shutdown."""
-    load_dotenv()  # OPENAI_API_KEY (optional) from .env
+    load_dotenv()  # GEMINI_API_KEY (optional) from .env
     logging.basicConfig(
         level=getattr(logging, config.LOG_LEVEL),
         format=config.LOG_FORMAT,
@@ -43,12 +48,13 @@ def main() -> None:
     transcript_queue: "queue.Queue" = queue.Queue(maxsize=config.TRANSCRIPT_QUEUE_SIZE)
     rag_queue: "queue.Queue" = queue.Queue(maxsize=config.RAG_QUEUE_SIZE)
     prompt_queue: "queue.Queue" = queue.Queue(maxsize=config.RAG_QUEUE_SIZE)
+    latest_transcript = LatestValue()
 
     threads = [
         CaptureThread(WebcamSource(), frame_queue, shutdown_event),
         FaceRecognitionThread(frame_queue, result_queue, rag_queue, shutdown_event),
-        RagThread(rag_queue, prompt_queue, shutdown_event),
-        VoiceThread(transcript_queue, shutdown_event),
+        RagThread(rag_queue, prompt_queue, shutdown_event, latest_transcript=latest_transcript),
+        VoiceThread(transcript_queue, shutdown_event, latest_transcript=latest_transcript),
         DisplayThread(result_queue, prompt_queue, transcript_queue, shutdown_event),
     ]
 

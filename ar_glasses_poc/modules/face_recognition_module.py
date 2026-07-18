@@ -101,7 +101,7 @@ class FaceRecognitionThread(threading.Thread):
             for encoding in encodings:
                 self._known_names.append(name)
                 self._known_encodings.append(encoding)
-        self._last_seen: Dict[str, float] = {}  # name -> last RAG-trigger timestamp
+        self._last_seen: Dict[str, float] = {}  # name -> last RAG-trigger time.monotonic() reading
         self._frame_count = 0
         self._last_faces: List[Dict[str, Any]] = []
 
@@ -139,7 +139,7 @@ class FaceRecognitionThread(threading.Thread):
         encodings = face_recognition.face_encodings(rgb_frame, boxes)
 
         faces: List[Dict[str, Any]] = []
-        now = time.time()
+        now = time.monotonic()
         for box, encoding in zip(boxes, encodings):
             name, confidence = self._match(encoding)
             new_detection = False

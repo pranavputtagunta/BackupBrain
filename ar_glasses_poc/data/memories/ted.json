@@ -1,0 +1,13 @@
+{
+  "name": "Ted",
+  "relationship": "friend",
+  "last_interaction": "Coffee last month",
+  "facts": [
+    {"text": "Retired firefighter", "important": true},
+    "Enjoys fishing on weekends"
+  ],
+  "recent_conversations": [
+    {"text": "Talked about a fishing trip to the lake", "timestamp": "2026-05-15T10:00:00"}
+  ],
+  "related_people": []
+}

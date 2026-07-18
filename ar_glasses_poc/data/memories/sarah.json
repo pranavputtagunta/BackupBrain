@@ -2,6 +2,13 @@
   "name": "Sarah",
   "relationship": "daughter",
   "last_interaction": "Visited last Sunday for lunch",
-  "facts": ["Lives nearby in the city", "Is a nurse", "Loves gardening"],
-  "recent_conversations": ["Talked about planting tomatoes this spring"]
+  "facts": [
+    {"text": "Is a nurse", "important": true},
+    {"text": "Lives nearby in the city", "important": false},
+    "Loves gardening"
+  ],
+  "recent_conversations": [
+    {"text": "Talked about planting tomatoes this spring", "timestamp": "2026-06-01T12:00:00"}
+  ],
+  "related_people": ["john"]
 }
