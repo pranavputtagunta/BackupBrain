@@ -1,3 +1,6 @@
+# BackupBrain: machine-managed embedding caches (derived from memory JSONs)
+ar_glasses_poc/data/memories/*.embeddings.json
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
